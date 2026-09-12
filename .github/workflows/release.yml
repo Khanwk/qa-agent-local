@@ -1,0 +1,31 @@
+name: Release QA Agent
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  verify-and-package-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run install:browser
+      - run: npm run build
+      - run: npm run selftest
+      - name: Create Windows client archive
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force release | Out-Null
+          $items = @(
+            'dist','src','ui','scripts','index.html','package.json','vite.config.ts',
+            'tsconfig.json','tsconfig.server.json','scripts-clean.mjs','.env.example',
+            'README.md','qa.config.example.json','install-windows.bat','start-windows.bat'
+          )
+          Compress-Archive -Path $items -DestinationPath release/qa-agent-windows.zip -Force
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: release/qa-agent-windows.zip
