@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.qa-agent/
+*.log
+.DS_Store
+config.bat

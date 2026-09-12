@@ -1,0 +1,19 @@
+{
+  "projectName": "Client Demo",
+  "projectPath": "C:\\Projects\\client-app",
+  "baseUrl": "http://localhost:3000",
+  "mode": "full",
+  "gitBase": "HEAD~1",
+  "requirements": [
+    { "id": "REQ-001", "title": "Prices use EUR", "type": "currency", "currency": "EUR", "symbol": "€", "forbiddenTokens": ["USD", "GBP", "£", "$"], "paths": ["/shop", "/cart"], "severity": "high", "enabled": true },
+    { "id": "REQ-002", "title": "Shop page exists", "type": "route", "path": "/shop", "severity": "high", "enabled": true },
+    { "id": "CODE-001", "title": "No dispatch in hook dependencies", "type": "forbidden-hook-dependency", "identifier": "dispatch", "severity": "medium", "enabled": true },
+    { "id": "REQ-003", "title": "Guest can reach checkout", "type": "browser-flow", "path": "/shop", "severity": "critical", "enabled": true, "steps": [
+      { "action": "click", "locator": { "by": "role", "role": "button", "name": "Add to cart" } },
+      { "action": "click", "locator": { "by": "role", "role": "link", "name": "Cart" } },
+      { "action": "expect-url", "contains": "/cart" }
+    ] },
+    { "id": "REQ-004", "title": "Checkout accessibility", "type": "accessibility", "path": "/checkout", "severity": "medium", "enabled": true },
+    { "id": "REQ-005", "title": "Checkout visual baseline", "type": "visual", "path": "/checkout", "severity": "medium", "enabled": false }
+  ]
+}
